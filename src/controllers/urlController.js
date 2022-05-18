@@ -8,14 +8,14 @@ const shortid= require('shortid')
 
 const shortenUrl = async function(req,res){
    try{ 
-       let longUrl=req.Body.longUrl
-    //    const baseUrl='http://localhost:3000'
+       let longUrl=req.body.longUrl
+       let data=req.body
 
     // if(!validUrl.isUri(baseUrl)){
     //     return res.status(400).send({status:false,msg:'invalid  baseUrl'})
     // 
-    console.log(longUrl)
-    if(Object.keys(Body).length==0){
+    //console.log(body.longUrl)
+    if(Object.keys(data).length==0){
         return res.status(400).send({status:false,message:'Url is required'})
     }
 
@@ -24,29 +24,33 @@ const shortenUrl = async function(req,res){
         
     }
 // validation of longurl
- longUrl=/[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(Body.longUrl)
-if(!longUrl){
-    return res.status(400).send({status:false,message:'longUrl is not valid'})
-}
-   
+//  longUrl=/[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/.test(Body.longUrl)
+// if(!longUrl){
+//     return res.status(400).send({status:false,message:'longUrl is not valid'})
+// }
+const baseUrl='http://localhost:3000'
 let urlCode=shortid.generate();
 let shortUrl=baseUrl+'/'+urlCode
   console.log(urlCode)
-if(validUrl.isUri(longUrl)){
+
 
 let urls={longUrl,shortUrl,urlCode}
 let createdUrls=await urlModel.create(urls)
 res.status(201).send({status:true,data:createdUrls})
-      }
+      
 }
     catch(err){
         console.log(err)
         res.status(500).send({status:false,message:err.message})
 }
 }
-
+//redirect url, GET API
 const redirectUrl= async function(req,res){
-    let shortUrlcode=req.params.shortUrl
+    let urlCode=req.params.urlCode
+    let orginalUrl=await urlModel.findOne({urlCode}).select({longUrl:1})
+    if(!orginalUrl){return res.status(400).send({status:false,message:'url not found'})}
+    res.status(301).send({data:orginalUrl})
+   
 }
 
 
