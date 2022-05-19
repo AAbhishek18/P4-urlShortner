@@ -4,8 +4,8 @@ const urlController=require('../controllers/urlController')
 
 
 
-router.post('/url/shorten',urlController.shortenUrl)
-router.get('/:urlCode',urlController.redirectUrl)
+router.post('/url/shorten',urlController.urlShortner)
+router.get('/:urlCode',urlController.getUrl)
 
 
 
