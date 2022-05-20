@@ -72,7 +72,7 @@ const urlShortner = async function (req, res) {
 
             let find = await urlModel.findOne({ longUrl: longUrl }).select({ createdAt: 0, updatedAt: 0, __v: 0, _id: 0 })
             if (find) {
-                await SET_ASYNC(`${req.body.longUrl}`, JSON.stringify(find),"Ex",30)
+                 await SET_ASYNC(`${req.body.longUrl}`, JSON.stringify(find))
                 return res.status(200).send({ status: true, data: find })
             }
             else {
@@ -83,7 +83,7 @@ const urlShortner = async function (req, res) {
                  await urlModel.create(urls)
 
                 let createdUrl = await urlModel.findOne({ urlCode: urlCode }).select({ _id: 0, __v: 0, createdAt: 0, updatedAt: 0 })
-                await SET_ASYNC(`${req.params.urlCode}`, JSON.stringify(createdUrl),"Ex",20)
+                await SET_ASYNC(`${req.params.urlCode}`, JSON.stringify(createdUrl),)
              return   res.status(201).send({ status: true, data: createdUrl })
 
 
