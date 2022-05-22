@@ -1,5 +1,5 @@
 const urlModel = require('../models/urlModel')
-const validUrl = require('valid-url')
+//const validUrl = require('valid-url')
 const shortid = require('shortid')
 const redis = require('redis')
 const { promisify } = require('util')
@@ -57,7 +57,7 @@ const urlShortner = async function (req, res) {
         else {
             let longUrl = req.body.longUrl
             if (!longUrl) {
-                return res.status(400).send({ status: false, msg: 'pls proide long url' })
+                return res.status(400).send({ status: false, msg: 'pls provide long url' })
             }
             if (!(longUrl.includes('//'))){
                 return res.status(400).send({status:false,message:'Enter valid url'})
@@ -75,10 +75,7 @@ const urlShortner = async function (req, res) {
                 return res.status(400).send({ status: false, msg: "pls provide valid long url link" })
             }
             
-            // if (!validUrl.isUri(longUrl)) {
-               
-
-            // }
+            
 
             let cachedlinkdata = await GET_ASYNC(`${req.body.longUrl}`)
             if (cachedlinkdata) {
@@ -132,15 +129,15 @@ const getUrl = async function (req, res) {
             let cacheddata = await GET_ASYNC(`${req.params.urlCode}`)
             if (cacheddata) {
                 let changetype = JSON.parse(cacheddata)
-                res.status(200).redirect(changetype.longUrl);
+               return res.status(200).redirect(changetype.longUrl);
             }
             let findUrl = await urlModel.findOne({ urlCode: urlCode })
             if (findUrl) {
                 await SET_ASYNC(`${req.params.urlCode}`, JSON.stringify(findUrl));
-                 res.status(200).redirect(findUrl.longUrl);
+                return res.status(200).redirect(findUrl.longUrl);
 
             } else {
-                 res.status(404).send({ status: false, messege: "invalid urlCode" })
+               return  res.status(404).send({ status: false, messege: "invalid urlCode" })
             }
 
         }
