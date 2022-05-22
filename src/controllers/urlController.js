@@ -59,15 +59,31 @@ const urlShortner = async function (req, res) {
             if (!longUrl) {
                 return res.status(400).send({ status: false, msg: 'pls proide long url' })
             }
-            if (!validUrl.isUri(longUrl)) {
-                return res.status(400).send({ status: false, msg: "pls provide valid long url link" })
-
+            if (!(longUrl.includes('//'))){
+                return res.status(400).send({status:false,message:'Enter valid url'})
             }
+
+            const urlParts=longUrl.split('//')
+            const scheme= urlParts[0]
+            const uri=urlParts[1]
+            //let shortenedUrlDtails
+            if(!(uri.includes('.'))){
+                
+                 res.status(400).send({status:false,message:'Invalid Url '})
+            }
+            if(!(((scheme=="http:")||(scheme == "https:")) && (urlParts[0].trim().length) &&(urlParts[1].trim()))){
+                return res.status(400).send({ status: false, msg: "pls provide valid long url link" })
+            }
+            
+            // if (!validUrl.isUri(longUrl)) {
+               
+
+            // }
 
             let cachedlinkdata = await GET_ASYNC(`${req.body.longUrl}`)
             if (cachedlinkdata) {
                 let change = JSON.parse(cachedlinkdata)
-                return res.status(200).send({ status: true, data: change })
+                return res.status(201).send({ status: true, data: change })
             }
 
             let find = await urlModel.findOne({ longUrl: longUrl }).select({ createdAt: 0, updatedAt: 0, __v: 0, _id: 0 })
@@ -116,15 +132,15 @@ const getUrl = async function (req, res) {
             let cacheddata = await GET_ASYNC(`${req.params.urlCode}`)
             if (cacheddata) {
                 let changetype = JSON.parse(cacheddata)
-                return res.status(302).redirect(changetype.longUrl);
+                res.status(200).redirect(changetype.longUrl);
             }
             let findUrl = await urlModel.findOne({ urlCode: urlCode })
             if (findUrl) {
                 await SET_ASYNC(`${req.params.urlCode}`, JSON.stringify(findUrl));
-                return res.status(302).redirect(findUrl.longUrl);
+                 res.status(200).redirect(findUrl.longUrl);
 
             } else {
-                return res.status(404).send({ status: false, messege: "Url not found" })
+                 res.status(404).send({ status: false, messege: "invalid urlCode" })
             }
 
         }
