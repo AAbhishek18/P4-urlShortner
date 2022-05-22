@@ -143,7 +143,7 @@ const getUrl = async function (req, res) {
         }
     }
     catch (error) {
-        return res.status(500).send({ status: false, error: error.message })
+     res.status(500).send({ status: false, error: error.message })
     }
 }
 
