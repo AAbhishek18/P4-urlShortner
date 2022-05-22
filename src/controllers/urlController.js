@@ -137,7 +137,7 @@ const getUrl = async function (req, res) {
                 return res.status(200).redirect(findUrl.longUrl);
 
             } else {
-               return  res.status(404).send({ status: false, messege: "invalid urlCode" })
+             res.status(404).send({ status: false, messege: "invalid urlCode" })
             }
 
         }
