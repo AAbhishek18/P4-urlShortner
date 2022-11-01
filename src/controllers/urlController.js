@@ -5,12 +5,12 @@ const redis = require("redis");
 const { promisify } = require("util");
 
 const redisClient = redis.createClient(
-  11580,
-  "redis-11580.c305.ap-south-1-1.ec2.cloud.redislabs.com",
+  19918,
+  "redis-19918.c8.us-east-1-3.ec2.cloud.redislabs.com",
 
   { no_ready_check: true }
 );
-redisClient.auth("Ek94PC6uVYDaR55tjjJlfQJtR86gHLo8", function (err) {
+redisClient.auth("27I6X5IAIJ8iVQgUo5gevRhykVULmIQs", function (err) {
   if (err) throw err;
 });
 
